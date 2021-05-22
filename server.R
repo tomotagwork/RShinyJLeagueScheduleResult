@@ -14,7 +14,7 @@ shinyServer(function(input, output, session){
   makeReactiveBinding("dfTeamStandings")
   teamOrder <- NULL
   makeReactiveBinding("teamOrder")
-  
+
 
   func_getData <- function(localYear){
   
@@ -137,6 +137,7 @@ shinyServer(function(input, output, session){
     dfWinCount <- dfTeamData %>% dplyr::group_by(target_team, target_team_Result) %>% dplyr::summarise(count=n()) %>% dplyr::filter(!is.na(target_team_Result))
     if (nrow(dfWinCount)>0){
       dfWinCount <- dcast(dfWinCount, target_team ~ target_team_Result, value.var="count")
+      dfWinCount[is.na(dfWinCount)] <- 0
       colnames(dfWinCount) <- c("target_team", "draw", "lose", "win")
       dfWinCount$num_of_matches <- dfWinCount$win + dfWinCount$draw + dfWinCount$lose
     } else {
@@ -146,7 +147,8 @@ shinyServer(function(input, output, session){
     dfTeamStandingsLocal <- dplyr::left_join(dfTeamStandingsLocal, dfWinCount, by="target_team")
     
     dfTeamStandingsLocal <- dplyr::arrange(dfTeamStandingsLocal, desc(point), desc(goaldiff), desc(goalfor))
-    dfTeamStandingsLocal$ranking <- c(1:18)
+    #dfTeamStandingsLocal$ranking <- c(1:18)
+    dfTeamStandingsLocal$ranking <- c(1:nrow(dfTeamStandingsLocal))
     
     dfTeamStandingsLocal <- dplyr::select(dfTeamStandingsLocal, ranking, target_team, point, num_of_matches, win, draw, lose, goalfor, goalagainst, goaldiff)
     

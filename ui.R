@@ -29,7 +29,6 @@ dashboardPage(
       tabItem_Point,
       tabItem_ResultAll,
       tabItem_ResultTeam
-      
     )
   ),
   skin="blue"
