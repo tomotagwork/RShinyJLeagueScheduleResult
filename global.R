@@ -16,7 +16,8 @@ library(rpivotTable)
 library(reshape2)
 library(xml2)
 library(rvest)
-library(purrr)
+library
+library(httr)
 
 source('./global_env.R', local=TRUE)
 

@@ -24,7 +24,9 @@ shinyServer(function(input, output, session){
     # get data
     #targetUrl_game<-"http://data.j-league.or.jp/SFMS01/search?competition_years=2019&competition_frame_ids=1&tv_relay_station_name="
     targetUrl_game <- paste0("http://data.j-league.or.jp/SFMS01/search?competition_years=", localYear, "&competition_frame_ids=1&tv_relay_station_name=")
-    dfTableOriginal_game <- readHTMLTable(targetUrl_game, header = FALSE, which=1, stringsAsFactors = FALSE)
+    #dfTableOriginal_game <- readHTMLTable(targetUrl_game, header = FALSE, which=1, stringsAsFactors = FALSE)
+    targetUrl_game <- GET(targetUrl_game)
+    dfTableOriginal_game <- readHTMLTable(rawToChar(targetUrl_game$content), header = FALSE, which=1, stringsAsFactors = FALSE)
     
     # create master table
     dfTableMaster <- dfTableOriginal_game
@@ -72,8 +74,10 @@ shinyServer(function(input, output, session){
     listTeamDataLocal <- list()
   
     for (i in 1:length(teamList)) {
+    #for (i in 1:length(aaa)) {
       #print(teamList[i])
       targetTeam<-teamList[i]
+      #targetTeam<-aaa[i]
       # Home game
       dfTempTeam_home <- dplyr::filter(dfTableMaster, home==targetTeam)
       dfTempTeam_home$target_team <- targetTeam
